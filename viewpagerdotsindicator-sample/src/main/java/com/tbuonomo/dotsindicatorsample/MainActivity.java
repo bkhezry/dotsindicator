@@ -1,9 +1,9 @@
 package com.tbuonomo.dotsindicatorsample;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -33,18 +33,37 @@ public class MainActivity extends AppCompatActivity {
     dotsIndicator.setCount(adapter.getCount());
     springDotsIndicator.setCount(adapter.getCount());
     wormDotsIndicator.setCount(adapter.getCount());
+    wormDotsIndicator.setCurrentPosition(adapter.getCount() - 1, 0);
+    dotsIndicator.setCurrentPosition(adapter.getCount() - 1, 0);
+    springDotsIndicator.setCurrentPosition(adapter.getCount() - 1, 0);
 
     viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
       @Override
       public void onPageScrolled(int position, float positionOffset, int i1) {
-        wormDotsIndicator.setCurrentPosition(position, positionOffset);
-        dotsIndicator.setCurrentPosition(position, positionOffset);
-        springDotsIndicator.setCurrentPosition(position, positionOffset);
-        Log.d("offset: ", String.valueOf(positionOffset));
+//        wormDotsIndicator.setCurrentPosition(position, positionOffset);
+//        dotsIndicator.setCurrentPosition(position, positionOffset);
+//        springDotsIndicator.setCurrentPosition(position, positionOffset);
+//        Log.d("offset: ", String.valueOf(positionOffset));
       }
 
       @Override
-      public void onPageSelected(int position) {
+      public void onPageSelected(final int position) {
+        Handler handler = new Handler();
+        for (float i = 0.1f; i < 0.9f; i += 0.3f) {
+          final float finalI = i;
+          handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+              wormDotsIndicator.setCurrentPosition(position, finalI);
+            }
+          }, 100);
+        }
+        handler.postDelayed(new Runnable() {
+          @Override
+          public void run() {
+            wormDotsIndicator.setCurrentPosition(position, 0);
+          }
+        }, 100);
       }
 
       @Override
